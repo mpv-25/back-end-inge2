@@ -30,6 +30,15 @@ npm install
 
 _El archivo **server/config/configExample.js** debe ser cambiado por **server/config/config.js** y se debe completar las variables de entornos necesarias para el correcto funcionamiento_
 
+## Construido con 🛠️
+
+_Menciona las herramientas que utilizaste para crear tu proyecto_
+
+- [NodeJs](https://nodejs.org/es/) - El Back-end.
+- [Express](https://www.npmjs.com/package/express) - El framework back-end usado.
+- [Angular](https://angular.io/) - El framework front-end usado.
+- [MongoDB](https://www.mongodb.com) - La base de datos usada.
+
 ## Autores ✒️
 
 _Menciona a todos aquellos que ayudaron a levantar el proyecto desde sus inicios_
