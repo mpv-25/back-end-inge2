@@ -1,4 +1,4 @@
-#Sistema de Gestión de Software - _Back-End_
+# Sistema de Gestión de Software - Back-End
 
 _Es un proyecto para la materia de ingeniería del software II de la FP-UNA, se trata del back-end de un Sistema de Gestión de Software._
 
