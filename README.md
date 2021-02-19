@@ -1,6 +1,6 @@
-# Sistema de administración de ítems de proyecto
+#Sistema de Gestión de Software - _Back-End_
 
-_Es un proyecto para la materia de ingeniería del software II de la FP-UNA, se trata del back-end del Sistema de administración de ítems de proyecto._
+_Es un proyecto para la materia de ingeniería del software II de la FP-UNA, se trata del back-end de un Sistema de Gestión de Software._
 
 ## Comenzando 🚀
 
@@ -28,8 +28,6 @@ _Para utilizar esta API necesitas clonar el repositorio luego ejecutar el comand
 npm install
 ```
 
-_El archivo **server/config/configExample.js** debe ser cambiado por **server/config/config.js** y se debe completar las variables de entornos necesarias para el correcto funcionamiento_
-
 ## Construido con 🛠️
 
 _Menciona las herramientas que utilizaste para crear tu proyecto_
@@ -39,10 +37,14 @@ _Menciona las herramientas que utilizaste para crear tu proyecto_
 - [Angular](https://angular.io/) - El framework front-end usado.
 - [MongoDB](https://www.mongodb.com) - La base de datos usada.
 
+## Versionado 📌
+
+Usamos [GitHub](https://github.com/mpv-25/back-end-inge2) para el versionado. Para todas las versiones disponibles, mira los [tags en este repositorio](https://github.com/mpv-25/back-end-inge2/tags).
+
 ## Autores ✒️
 
 _Menciona a todos aquellos que ayudaron a levantar el proyecto desde sus inicios_
 
-- **Matias Pinto** - _Desarrollo_
-- **Junior Legal** - _Desarrollo_
-- **Juan Bareiro** - _Desarrollo_
+- **[Juan Bareiro](https://github.com/jubacardo)** - _Desarrollo_
+- **[Junior Legal](https://github.com/JLegal93)** - _Desarrollo_
+- **[Matias Pinto](https://github.com/Matias25pinto)** - _Desarrollo_
