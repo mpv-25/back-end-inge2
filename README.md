@@ -2,7 +2,7 @@
 
 _Es un proyecto para la materia de ingeniería del software II de la FP-UNA, se trata del back-end de un Sistema de Gestión de Software._
 
-_Puede ver el proyecto funcionando hasta el último sprint dando click a_**[ver proyecto](https://back-end-inge2.herokuapp.com/#/login)**
+_Puede ver el proyecto funcionando hasta el último sprint dando click a **[ver proyecto](https://back-end-inge2.herokuapp.com/#/login)**_
 
 ## Comenzando 🚀
 
