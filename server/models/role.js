@@ -3,38 +3,19 @@ const uniqueValidator = require("underscore");
 
 const Schema = mongoose.Schema;
 
-const permisos = {
-  values: [
-    "crearRole",
-    "crearUsuario",
-    "asignarRol",
-    "crearProyecto",
-    "crearTareas",
-    "agregarTareas",
-    "crearLineaBase",
-    "visualizarLineaBase",
-  ],
-  message: "{VALUE} no es un permiso válido",
-};
-const tipo = {
-  values: ["SISTEMA", "PROYECTO"],
-  message: "{VALUE} no es un permiso válido",
-};
-
 const roleSchema = Schema({
-  tipo: {
-    type: String,
-    require: [true, "El tipo es obligatorio"],
-    enum: tipo,
-  },
   nombre: {
     type: String,
     unique: true,
     require: [true, "El nombre es obligatorio"],
   },
+  descripcion: {
+    type:String,
+    require: [true, 'La descripción es obligatoria'],
+  },
   permisos: {
     type: Array,
-    require: false,
+    require: [true, "El rol debe tener por lo menos un permiso"],
   },
 });
 

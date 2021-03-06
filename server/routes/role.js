@@ -3,7 +3,7 @@ const express = require("express"); //Para poder utilizar el framework de expres
 const cors = require("cors");
 
 const corsOptions = {
-  origin: "http://localhost:4200/login",
+  origin: "http://localhost:4200/",
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 const Role = require("../models/role");
@@ -26,22 +26,35 @@ app.get("/roles", (req, res) => {
   });
 });
 
+app.get("/role/:id", (req, res) => {
+  let id = req.params.id;
+  Role.findById(id).exec((err, roleBD) => {
+    if (err) {
+      return res.status(500).json({
+        ok: false,
+        err,
+      });
+    }
+    res.status(200).json({
+      ok: true,
+      role: roleBD,
+    });
+  });
+});
+
 app.post("/role", (req, res) => {
-  let tipo = req.body.tipo;
   let nombre = req.body.nombre;
+  let descripcion = req.body.descripcion;
   let permisos = req.body.permisos;
-  if (!tipo || !nombre || !permisos) {
+  if (!nombre || !permisos || !descripcion) {
     return res.status(500).json({
       ok: false,
       message: "Complete todos los campos",
-      tipo,
-      nombre,
-      permisos,
     });
   }
   const role = new Role({
-    tipo,
     nombre,
+    descripcion,
     permisos,
   });
   role.save((err, roleBD) => {
@@ -54,7 +67,7 @@ app.post("/role", (req, res) => {
 
     res.status(200).json({
       ok: true,
-      Role: roleBD,
+      role: roleBD,
     });
   });
 });
@@ -62,6 +75,7 @@ app.post("/role", (req, res) => {
 app.put("/role/:id", (req, res) => {
   let id = req.params.id;
   let permisos = req.body.permisos;
+  let descripcion = req.body.descripcion;
   let nombre = req.body.nombre;
   let update = {};
   if (permisos) {
@@ -70,10 +84,13 @@ app.put("/role/:id", (req, res) => {
   if (nombre) {
     update["nombre"] = nombre;
   }
-  if (!permisos && !nombre) {
+  if (descripcion) {
+    update["descripcion"] = descripcion;
+  }
+  if (!permisos && !nombre && !descripcion) {
     return res.status(500).json({
       ok: false,
-      message: "permisos y nombre en blanco",
+      message: "Todos los parametros estan en blanco",
     });
   }
 
@@ -87,7 +104,7 @@ app.put("/role/:id", (req, res) => {
 
     res.status(200).json({
       ok: true,
-      updateBD,
+      update: updateBD,
     });
   });
 });
@@ -104,7 +121,7 @@ app.delete("/role/:id", (req, res) => {
     res.status(200).json({
       ok: true,
       message: "Role Eliminado",
-      roleBD,
+      delete: roleBD,
     });
   });
 });

@@ -55,6 +55,7 @@ app.post("/login", (req, res) => {
 
     res.json({
       ok: true,
+      usuario: usuarioBD,
       token,
     });
   });
@@ -92,7 +93,7 @@ app.get("/usuarios", (req, res) => {
   let limite = req.query.limite || 5;
   limite = Number(limite);
 
-  Usuario.find(condicion)
+  Usuario.find()
     .skip(desde)
     .limit(limite)
     .exec((err, usuarios) => {
@@ -111,22 +112,54 @@ app.get("/usuarios", (req, res) => {
       });
     });
 });
+app.put("/usuario/role/:id", (req, res) => {
+  let id = req.params.id;
+  let body = _.pick(req.body, ["role"]);
+  Usuario.findByIdAndUpdate(id, body, { new: true }, (err, usuarioUpdate) => {
+    if (err) {
+      return res.status(500).json({
+        ok: false,
+        err,
+      });
+    }
+    if (!usuarioUpdate) {
+      return res.status(500).json({
+        ok: false,
+        err: {
+          message: "El usuario no existe",
+        },
+      });
+    }
+    res.status(200).json({
+      ok: true,
+      usuario: usuarioUpdate,
+    });
+  });
+});
 app.put("/usuario/:id", (req, res) => {
   let id = req.params.id;
   let body = _.pick(req.body, [
     "nombre",
     "apellido",
     "email",
-    "img",
     "role",
+    "img",
     "estado",
   ]); //la funcion pick de undercore, permite filtrar solo las propiedades que quiero del objeto
 
-  Usuario.findByIdAndUpdate(id, body, { new: true }, (err, usuarioUpdate) => {
+    Usuario.findByIdAndUpdate(id, body, { new: true }, (err, usuarioUpdate) => {
     if (err) {
       return res.status(400).json({
         ok: false,
         err,
+      });
+    }
+    if (!usuarioUpdate) {
+      return res.status(500).json({
+        ok: false,
+        err: {
+          message: "El usuario no existe",
+        },
       });
     }
     res.json({
@@ -138,34 +171,18 @@ app.put("/usuario/:id", (req, res) => {
 });
 app.delete("/usuario/:id", (req, res) => {
   let id = req.params.id;
-  let cambiarEstado = {
-    estado: false,
-  };
-  //obse {new:true} devuelve el objeto nuevo, y {new:false} devuelve el objeto antes de ser actualizado
-  Usuario.findByIdAndUpdate(
-    id,
-    cambiarEstado,
-    { new: true },
-    (err, usuarioEliminado) => {
-      if (err) {
-        return res.status(400).json({
-          ok: false,
-          err,
-        });
-      }
-      if (!usuarioEliminado) {
-        return res.status(404).json({
-          ok: false,
-          message: "El id no existe",
-        });
-      }
-      res.json({
-        ok: true,
-        message: "Usuario Eliminado",
-        usuario: usuarioEliminado,
+  Usuario.findByIdAndDelete(id, (err, usuario) => {
+    if (err) {
+      return res.status(500).json({
+        ok: false,
+        err,
       });
     }
-  );
+    res.status(200).json({
+      ok: true,
+      eliminado: usuario,
+    });
+  });
 });
 
 module.exports = app;
