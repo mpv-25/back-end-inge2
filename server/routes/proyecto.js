@@ -24,6 +24,8 @@ app.post("/proyecto", (req, res) => {
   let nombre = body.nombre;
   let gerente = body.gerente;
   let descripcion = body.descripcion;
+  let tareas = body.tareas;
+
   if (!nombre || !gerente || !descripcion) {
     return res.status(500).json({
       ok: false,
@@ -32,10 +34,12 @@ app.post("/proyecto", (req, res) => {
       },
     });
   }
+
   let proyecto = new Proyecto({
     nombre,
     gerente,
     descripcion,
+    tareas,
   });
   proyecto.save((err, proyectoBD) => {
     if (err) {
@@ -49,6 +53,34 @@ app.post("/proyecto", (req, res) => {
       proyecto: proyectoBD,
     });
   });
+});
+
+app.put("/proyecto/:id", (req, res) => {
+  let id = req.params.id;
+  let body = req.body;
+  let update = {
+    nombre: body.nombre,
+    gerente: body.gerente,
+    descripcion: body.descripcion,
+    tareas: body.tareas,
+  };
+  Proyecto.findByIdAndUpdate(
+    id,
+    update,
+    { new: true },
+    (err, proyectoUpdate) => {
+      if (err) {
+        return res.status(500).json({
+          ok: true,
+          err,
+        });
+      }
+      res.status(200).json({
+        ok: true,
+        proyecto: proyectoUpdate,
+      });
+    }
+  );
 });
 
 module.exports = app;

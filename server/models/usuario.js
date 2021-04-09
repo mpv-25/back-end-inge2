@@ -27,10 +27,10 @@ let usuarioSchema = new Schema({
     type: String,
     require: false,
   },
-  role:{
+  role: {
     type: Schema.Types.ObjectId,
-    ref: 'Role',
-    require:[true, 'El rol es obligatorio'],
+    ref: "Role",
+    require: [true, "El rol es obligatorio"],
   },
   estado: {
     type: Boolean,
