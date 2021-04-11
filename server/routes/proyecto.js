@@ -24,7 +24,7 @@ app.post("/proyecto", (req, res) => {
   let nombre = body.nombre;
   let gerente = body.gerente;
   let descripcion = body.descripcion;
-  let tareas = body.tareas;
+  let tareas = [];
 
   if (!nombre || !gerente || !descripcion) {
     return res.status(500).json({
