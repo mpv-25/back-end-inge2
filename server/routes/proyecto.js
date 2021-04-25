@@ -22,11 +22,10 @@ app.get("/proyectos", (req, res) => {
 app.post("/proyecto", (req, res) => {
   let body = req.body;
   let nombre = body.nombre;
-  let gerente = body.gerente;
   let descripcion = body.descripcion;
   let tareas = [];
 
-  if (!nombre || !gerente || !descripcion) {
+  if (!nombre || !descripcion) {
     return res.status(500).json({
       ok: false,
       err: {
@@ -37,7 +36,6 @@ app.post("/proyecto", (req, res) => {
 
   let proyecto = new Proyecto({
     nombre,
-    gerente,
     descripcion,
     tareas,
   });
@@ -60,9 +58,9 @@ app.put("/proyecto/:id", (req, res) => {
   let body = req.body;
   let update = {
     nombre: body.nombre,
-    gerente: body.gerente,
     descripcion: body.descripcion,
     tareas: body.tareas,
+    lineasBase: body.lineasBase
   };
   Proyecto.findByIdAndUpdate(
     id,
@@ -81,6 +79,23 @@ app.put("/proyecto/:id", (req, res) => {
       });
     }
   );
+});
+
+app.delete("/proyecto/:id", (req, res) => {
+  let id = req.params.id;
+  Proyecto.findByIdAndDelete(id, (err, proyectoBorrado) => {
+    if (err) {
+      return res.status(500).json({
+        ok: false,
+        err,
+      });
+    }
+    res.status(200).json({
+      ok: true,
+      message: "Proyecto eliminado",
+      proyectoBorrado,
+    });
+  });
 });
 
 module.exports = app;
