@@ -18,6 +18,7 @@ const app = express(); //El objeto de express()
 app.use(cors());
 
 const Usuario = require("../models/usuario"); // Para poder usar el Schema de mongoose
+const Role = require("../models/role");
 
 app.post("/login", (req, res) => {
   let body = req.body;
@@ -112,6 +113,28 @@ app.get("/usuarios", (req, res) => {
       });
     });
 });
+//Consultar la cantidad de usuarios por rol
+const calcularCantidad = async (id) => {
+  try {
+    return await Usuario.countDocuments({ role: id });
+  } catch (err) {
+    return [];
+  }
+};
+app.get("/usuarios/por-rol", async (req, res) => {
+  try {
+    const roles = await Role.find();
+    let resp = [];
+    //for await desde el ES6 permite hacer bucles asincronos
+    for await (let role of roles) {
+      let cantidad = await calcularCantidad(role._id);
+      resp.push({ nombre: role.nombre, cantidad });
+    }
+    res.json({ ok: true, cantidadPorRole: resp });
+  } catch (err) {
+    res.status(500).json({ msg: "ERROR!!! ocurrio un error en el servidor" });
+  }
+});
 app.put("/usuario/role/:id", (req, res) => {
   let id = req.params.id;
   let body = _.pick(req.body, ["role"]);
@@ -147,7 +170,7 @@ app.put("/usuario/:id", (req, res) => {
     "estado",
   ]); //la funcion pick de undercore, permite filtrar solo las propiedades que quiero del objeto
 
-    Usuario.findByIdAndUpdate(id, body, { new: true }, (err, usuarioUpdate) => {
+  Usuario.findByIdAndUpdate(id, body, { new: true }, (err, usuarioUpdate) => {
     if (err) {
       return res.status(400).json({
         ok: false,

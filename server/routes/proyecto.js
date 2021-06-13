@@ -19,6 +19,70 @@ app.get("/proyectos", (req, res) => {
   });
 });
 
+//proyectos/cant-tareas
+app.get("/proyectos/cant-tareas", async (req, res) => {
+  try {
+    const proyectos = await Proyecto.find();
+    const resp = proyectos.map((data) => {
+      let finalizado = 0;
+      let pendiente = 0;
+      let iniciado = 0;
+      data.tareas.map((tarea) => {
+        if (tarea.estado === "finalizado") {
+          ++finalizado;
+        }
+        if (tarea.estado === "pendiente") {
+          ++pendiente;
+        }
+        if (tarea.estado === "iniciado") {
+          ++iniciado;
+        }
+        return;
+      });
+
+      return {
+        nombre: data.nombre,
+        cantidad: data.tareas.length,
+        finalizado,
+        pendiente,
+        iniciado,
+      };
+    });
+    for await (let proyecto of proyectos) {
+    }
+    res.json(resp);
+  } catch (err) {
+    res.status(500).json({ msg: "ERROR!!! ocurrio un error en el servidor" });
+  }
+});
+//proyectos/cant-lb
+app.get("/proyectos/cant-lb", async (req, res) => {
+  try {
+    const proyectos = await Proyecto.find();
+    let resp = [];
+    proyectos.map((proyecto) => {
+      let lbAbierto = 0;
+      let lbCerrado = 0;
+      proyecto.lineasBase.map((lb) => {
+        if (lb.abierto) {
+          ++lbAbierto;
+        } else {
+          ++lbCerrado;
+        }
+      });
+      resp.push({
+        proyecto: proyecto.nombre,
+        cantidadLB: proyecto.lineasBase.length,
+        cantidadLBabiertas: lbAbierto,
+        cantidadLBcerradas: lbCerrado,
+      });
+    });
+    res.json(resp);
+  } catch (err) {
+    res.status(500).json({ msg: "ERROR!!! ocurrio un error en el servidor" });
+  }
+});
+
 app.post("/proyecto", (req, res) => {
   let body = req.body;
   let nombre = body.nombre;
@@ -60,7 +124,7 @@ app.put("/proyecto/:id", (req, res) => {
     nombre: body.nombre,
     descripcion: body.descripcion,
     tareas: body.tareas,
-    lineasBase: body.lineasBase
+    lineasBase: body.lineasBase,
   };
   Proyecto.findByIdAndUpdate(
     id,
